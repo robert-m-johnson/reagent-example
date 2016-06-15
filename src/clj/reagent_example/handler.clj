@@ -1,5 +1,7 @@
 (ns reagent-example.handler
-  (:require [compojure.core :refer [GET defroutes]]
+  (:require [reagent-example.frameworks :as frameworks]
+            [ring.middleware.format :refer [wrap-restful-format]]
+            [compojure.core :refer [GET defroutes]]
             [compojure.route :refer [not-found resources]]
             [hiccup.page :refer [include-js include-css html5]]
             [reagent-example.middleware :refer [wrap-middleware]]
@@ -30,8 +32,13 @@
 (defroutes routes
   (GET "/" [] loading-page)
   (GET "/about" [] loading-page)
-  
+  (GET "/frameworks" [] {:body ["foo" "bar"]})
+
   (resources "/")
   (not-found "Not Found"))
 
-(def app (wrap-middleware #'routes))
+(defn outer-wrap [handler]
+  (-> handler
+      (wrap-restful-format)))
+
+(def app (outer-wrap (wrap-middleware #'routes)))
