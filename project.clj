@@ -102,6 +102,7 @@
                                                 org.clojure/clojurescript
                                                 org.clojure/core.async
                                                 org.clojure/tools.analyzer.jvm]]
+                                  [figwheel-sidecar "0.5.0-SNAPSHOT"]
                                   [org.clojure/tools.nrepl "0.2.12"]
                                   [com.cemerick/piggieback "0.2.2-SNAPSHOT"]
                                   [pjstadig/humane-test-output "0.8.0"]
