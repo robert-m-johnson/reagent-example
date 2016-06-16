@@ -1,5 +1,5 @@
 (ns reagent-example.handler
-  (:require [reagent-example.frameworks :as frameworks]
+  (:require [reagent-example.data :as data]
             [ring.middleware.format :refer [wrap-restful-format]]
             [compojure.core :refer [GET defroutes]]
             [compojure.route :refer [not-found resources]]
@@ -32,7 +32,7 @@
 (defroutes routes
   (GET "/" [] loading-page)
   (GET "/about" [] loading-page)
-  (GET "/frameworks" [] {:body ["foo" "bar"]})
+  (GET "/frameworks" [] {:body data/frameworks})
 
   (resources "/")
   (not-found "Not Found"))
