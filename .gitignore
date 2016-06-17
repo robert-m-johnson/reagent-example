@@ -13,3 +13,5 @@ pom.xml.asc
 /.repl
 *.log
 /.env
+
+resources/public/css/site.min.css
