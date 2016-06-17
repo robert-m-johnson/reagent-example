@@ -24,5 +24,9 @@
    "Zepto"
    ])
 
+(defn name->framework [name]
+  {:name name
+   :stars (inc (rand-int 500))})
+
 (def frameworks
-  (apply vector (map #(hash-map :name %) names)))
+  (apply vector (map name->framework names)))

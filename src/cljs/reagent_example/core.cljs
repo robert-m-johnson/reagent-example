@@ -34,11 +34,20 @@
 
 (defonce frameworks (atom [{:name "Regeant"}]))
 
-(defn framework-table-row [{name :name :as framework}]
-  [:tr [:td name]])
+(defn framework-table-row
+  [{name :name
+    stars :stars
+    :as framework}]
+  [:tr
+   [:td name]
+   [:td stars]])
 
 (defn frameworks-table []
   [:table
+   [:thead
+    [:tr
+     [:th "Name"]
+     [:th "Stars"]]]
    [:tbody
     (let [fks @frameworks]
       (for [framework fks]
@@ -46,7 +55,7 @@
 
 (defn layout []
   [:div
-   [:div [:h1 "Reagent example"]]
+   [:div [:h1 "Reagent Example"]]
    [frameworks-table]])
 
 (defn mount-root []
