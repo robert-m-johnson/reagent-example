@@ -5,6 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
   :dependencies [[org.clojure/clojure "1.8.0"]
+                 [org.clojure/core.async "0.2.382"]
                  [ring-server "0.4.0"]
                  [reagent "0.6.0-rc"]
                  [reagent-forms "0.5.24"]
@@ -20,6 +21,7 @@
                  [secretary "1.2.3"]
                  [venantius/accountant "0.1.7"
                   :exclusions [org.clojure/tools.reader]]
+                 [mount "0.1.10"]
 
                  ;; ClojureScript
                  [cljs-ajax "0.5.5"]
@@ -69,9 +71,6 @@
               :source-map true
               :optimizations :none
               :pretty-print  true}}
-
-
-
             }
    }
 

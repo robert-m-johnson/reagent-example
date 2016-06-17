@@ -32,7 +32,7 @@
 (defroutes routes
   (GET "/" [] loading-page)
   (GET "/about" [] loading-page)
-  (GET "/frameworks" [] {:body data/frameworks})
+  (GET "/frameworks" [] {:body @data/frameworks})
 
   (resources "/")
   (not-found "Not Found"))
