@@ -32,41 +32,22 @@
 ;; -------------------------
 ;; Initialize app
 
-(def nam (atom "Brian"))
+(defonce frameworks (atom [{:name "Regeant"}]))
 
-(defn rendered-timestamp []
-  "foo")
-
-(defn greeter-component []
-  [:div "Hello " @nam])
-
-(defn timer-component []
-  (let [seconds-elapsed (reagent/atom 0)]     ;; setup, and local state
-    (fn []        ;; inner, render function is returned
-      (js/setTimeout #(swap! seconds-elapsed inc) 1000)
-      [:div "Seconds Elapsed: " @seconds-elapsed])))
-
-(defn simple-component []
-  [:div
-   [:p "I am a component!"]
-   [:p.someclass
-    "I have " [:strong "bold"]
-    [:span {:style {:color "red"}} " and red "] "text."]])
-
-(def frameworks (atom [{:name "Regeant"}]))
-
-(defn framework-table-row [framework]
-  [:tr
-   [:td (:name framework)]])
+(defn framework-table-row [{name :name :as framework}]
+  ^{:key name} [:tr [:td name]])
 
 (defn frameworks-table []
   [:table
    [:tbody
-    (map framework-table-row @frameworks)]])
+    (let [fks @frameworks]
+      (for [framework fks]
+        (let [{name :name} framework]
+          ^{:key name} [:tr [:td name]])))]])
 
 (defn layout []
   [:div
-   [:div "Reagent example"]
+   [:div [:h1 "Reagent example"]]
    [frameworks-table]])
 
 (defn mount-root []
