@@ -13,20 +13,23 @@
    "Enyo"
    "Hummingbird"
    "Jaggery"
-   "JQuery"
+   "jQuery"
    "Kango"
+   "Lodash"
    "Mithril"
    "Potato"
    "React"
    "RequireJS"
    "Snack"
    "truckJS"
+   "Underscore"
    "Zepto"
    ])
 
 (defn name->framework [name]
   {:name name
-   :stars (inc (rand-int 500))})
+   :stars (rand-int 500)
+   :forks (rand-int 50)})
 
 (def frameworks
   (apply vector (map name->framework names)))

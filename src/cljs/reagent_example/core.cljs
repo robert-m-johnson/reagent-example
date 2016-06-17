@@ -35,19 +35,20 @@
 (defonce frameworks (atom [{:name "Regeant"}]))
 
 (defn framework-table-row
-  [{name :name
-    stars :stars
+  [{:keys [name stars forks]
     :as framework}]
   [:tr
    [:td name]
-   [:td stars]])
+   [:td stars]
+   [:td forks]])
 
 (defn frameworks-table []
   [:table
    [:thead
     [:tr
      [:th "Name"]
-     [:th "Stars"]]]
+     [:th "Stars"]
+     [:th "Forks"]]]
    [:tbody
     (let [fks @frameworks]
       (for [framework fks]
