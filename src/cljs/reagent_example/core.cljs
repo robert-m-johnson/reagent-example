@@ -58,7 +58,7 @@
 
 (defn fetch-data []
   (GET "/frameworks"
-      {:response-format :transit
+      {:response-format (ajax.edn/edn-response-format)
        :handler (fn [response]
                   (.log js/console (str response))
                   (reset! frameworks response)
