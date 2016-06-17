@@ -35,15 +35,14 @@
 (defonce frameworks (atom [{:name "Regeant"}]))
 
 (defn framework-table-row [{name :name :as framework}]
-  ^{:key name} [:tr [:td name]])
+  [:tr [:td name]])
 
 (defn frameworks-table []
   [:table
    [:tbody
     (let [fks @frameworks]
       (for [framework fks]
-        (let [{name :name} framework]
-          ^{:key name} [:tr [:td name]])))]])
+        ^{:key (:name framework)} [framework-table-row framework]))]])
 
 (defn layout []
   [:div
