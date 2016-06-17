@@ -1,10 +1,13 @@
 (ns reagent-example.core
-    (:require [reagent.core :as reagent :refer [atom]]
-              [reagent.session :as session]
-              [ajax.core :refer [GET POST]]
-              [ajax.edn :refer [edn-response-format]]
-              [secretary.core :as secretary :include-macros true]
-              [accountant.core :as accountant]))
+  (:require-macros [cljs.core.async.macros :refer [alt! go go-loop]])
+  (:require [cljs.core.async :as async :refer [timeout <! chan]]
+            [reagent.core :as reagent :refer [atom]]
+            [reagent.session :as session]
+            [ajax.core :refer [GET POST]]
+            [ajax.edn :refer [edn-response-format]]
+            [mount.core :as mount :include-macros true]
+            [secretary.core :as secretary :include-macros true]
+            [accountant.core :as accountant]))
 
 ;; -------------------------
 ;; Views
@@ -70,10 +73,25 @@
   (GET "/frameworks"
       {:response-format (ajax.edn/edn-response-format)
        :handler (fn [response]
-                  (.log js/console (str response))
+                  ;;(.log js/console (str response))
                   (reset! frameworks response)
                   )
        }))
+
+(defn create-looper []
+  (let [stop-chan (chan)]
+    (go-loop []
+      (when (alt!
+              stop-chan false
+              :default :keep-alive)
+        (<! (timeout 3000))
+        (fetch-data)
+        (recur)))
+    stop-chan))
+
+;; (defstate looper
+;;   :start (create-looper)
+;;   :stop (async/close! looper))
 
 (defn init! []
   (fetch-data)
@@ -86,4 +104,5 @@
        (secretary/locate-route path))})
   (accountant/dispatch-current!)
   (mount-root)
+  (create-looper)
   )
