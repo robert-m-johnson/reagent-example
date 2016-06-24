@@ -11,7 +11,8 @@
 
 (defstate server
   :start (create-server)
-  :stop (.stop server))
+  ;;:stop (.stop server)
+  )
 
 (defn -main [& args]
   (mount/start))
