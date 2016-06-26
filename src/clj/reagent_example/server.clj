@@ -9,10 +9,11 @@
   (let [port (Integer/parseInt (or (env :port) "3000"))]
     (run-jetty app {:port port :join? false})))
 
-(defstate server
-  :start (create-server)
-  ;;:stop (.stop server)
-  )
+;;(defstate server
+;;  :start (create-server)
+;;  :stop (.stop server)
+;;  )
 
 (defn -main [& args]
+  (def server (create-server))
   (mount/start))
