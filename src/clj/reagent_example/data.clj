@@ -35,7 +35,7 @@
   (atom (create-frameworks)))
 
 (defn unique-rands
-  "Generates a set of n random numbers between 0 and l-n"
+  "Generates a set of n random numbers between 0 and l-1"
   [n l]
   (if (>= n l)
     (into #{} (range l))
