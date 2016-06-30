@@ -60,18 +60,19 @@
            framework)))
      indices)))
 
-(defn create-looper []
-  (let [stop-chan (chan)]
-    (go-loop []
-      (when (alt!
-              stop-chan false
-              :default :keep-alive)
-        (<! (timeout 3000))
-        (swap! frameworks update-some-frameworks)
-        (recur)))
-    stop-chan))
+(defmacro go-looper [body]
+  `(let [stop-chan# (chan)]
+     (go-loop []
+       (when (alt!
+               stop-chan# false
+               :default :keep-alive)
+         ~body
+         (recur)))
+     stop-chan#))
 
 (defstate looper
-  :start (create-looper)
+  :start (go-looper
+          (do (<! (timeout 3000))
+              (swap! frameworks update-some-frameworks)))
   :stop (async/close! looper))
 
