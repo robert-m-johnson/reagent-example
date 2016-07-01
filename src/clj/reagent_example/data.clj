@@ -1,6 +1,6 @@
 (ns reagent-example.data
-  (:require [clojure.core.async :as async :refer
-             [alt! go-loop timeout <! chan]]
+  (:require [reagent-example.async-util :refer [go-looper]]
+            [clojure.core.async :as async :refer [timeout <!]]
             [mount.core :refer [defstate]]))
 
 (def ^:private real-names
@@ -41,10 +41,14 @@
     (into #{} (range l))
     (loop [acc #{}]
       (if (= (count acc) n)
+        ;; If we have enough numbers then return them
         acc
+        ;; Otherwise, create a new random number
         (let [r (rand-int l)]
           (if (acc r)
+            ;; If it's already in the set try again
             (recur acc)
+            ;; Otherwise, add it to the set
             (recur (conj acc r))))))))
 
 (defn update-some-frameworks [frameworks]
@@ -59,16 +63,6 @@
            (name->framework (:name framework))
            framework)))
      indices)))
-
-(defmacro go-looper [body]
-  `(let [stop-chan# (chan)]
-     (go-loop []
-       (when (alt!
-               stop-chan# false
-               :default :keep-alive)
-         ~body
-         (recur)))
-     stop-chan#))
 
 (defstate looper
   :start (go-looper

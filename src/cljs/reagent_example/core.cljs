@@ -1,5 +1,5 @@
 (ns reagent-example.core
-  (:require-macros [cljs.core.async.macros :refer [alt! go go-loop]])
+  (:require-macros [reagent-example.async-util-cljs :refer [go-looper]])
   (:require [cljs.core.async :as async :refer [timeout <! chan]]
             [reagent.core :as reagent :refer [atom]]
             [reagent.session :as session]
@@ -47,25 +47,7 @@
   (GET "/frameworks"
       {:response-format (ajax.edn/edn-response-format)
        :handler (fn [response]
-                  ;;(.log js/console (str response))
-                  (reset! frameworks response)
-                  )
-       }))
-
-(defn create-looper []
-  (let [stop-chan (chan)]
-    (go-loop []
-      (when (alt!
-              stop-chan false
-              :default :keep-alive)
-        (<! (timeout 3000))
-        (fetch-data)
-        (recur)))
-    stop-chan))
-
-;; (defstate looper
-;;   :start (create-looper)
-;;   :stop (async/close! looper))
+                  (reset! frameworks response))}))
 
 (defn init! []
   (fetch-data)
@@ -78,5 +60,8 @@
        (secretary/locate-route path))})
   (accountant/dispatch-current!)
   (mount-root)
-  (create-looper)
+   (go-looper
+    (do
+      (<! (timeout 3000))
+      (fetch-data)))
   )
