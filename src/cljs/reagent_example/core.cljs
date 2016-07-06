@@ -1,5 +1,6 @@
 (ns reagent-example.core
-  (:require-macros [reagent-example.async-util-cljs :refer [go-looper]])
+  (:require-macros [reagent-example.async-util-cljs :refer [go-looper]]
+                   [reagent-example.components :refer [table]])
   (:require [cljs.core.async :as async :refer [timeout <! chan]]
             [reagent.core :as reagent :refer [atom]]
             [reagent.session :as session]
@@ -11,25 +12,31 @@
 
 (defonce frameworks (atom []))
 
-(defn framework-table-row
-  [{:keys [name stars forks]
-    :as framework}]
-  [:tr
-   [:td name]
-   [:td stars]
-   [:td forks]])
+;; (defn frameworks-table []
+;;   [:table
+;;    [:thead
+;;     [:tr
+;;      [:th "Name"]
+;;      [:th "Stars"]
+;;      [:th "Forks"]]]
+;;    [:tbody
+;;     (let [fks @frameworks]
+;;       (for [framework fks]
+;;         (with-meta
+;;           [:tr
+;;            [:td (:name framework)]
+;;            [:td (:stars framework)]
+;;            [:td (:forks framework)]]
+;;           {:key (:name framework)})
+;;         ))]])
 
 (defn frameworks-table []
-  [:table
-   [:thead
-    [:tr
-     [:th "Name"]
-     [:th "Stars"]
-     [:th "Forks"]]]
-   [:tbody
-    (let [fks @frameworks]
-      (for [framework fks]
-        ^{:key (:name framework)} [framework-table-row framework]))]])
+  (table
+   frameworks
+   :name
+   [["Name" :name]
+    ["Stars" :stars]
+    ["Forks" :forks]]))
 
 (defn layout []
   [:div
@@ -63,5 +70,4 @@
    (go-looper
     (do
       (<! (timeout 3000))
-      (fetch-data)))
-  )
+      (fetch-data))))
