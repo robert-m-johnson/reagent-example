@@ -1,5 +1,6 @@
 (ns reagent-example.handler
   (:require [reagent-example.data :as data]
+            [reagent-example.shared-code :as shared]
             [ring.middleware.format :refer [wrap-restful-format]]
             [compojure.core :refer [GET defroutes]]
             [compojure.route :refer [not-found resources]]
@@ -22,7 +23,10 @@
   (html5
     (head)
     [:body {:class "body-container"}
-     mount-target
+     [:div
+      mount-target
+      [:hr]
+      [:div (shared/get-message)]]
      (include-js "/js/app.js")]))
 
 

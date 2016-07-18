@@ -2,6 +2,7 @@
   (:require-macros [reagent-example.async-util-cljs :refer [go-looper]]
                    [reagent-example.components :refer [table]])
   (:require [cljs.core.async :as async :refer [timeout <! chan]]
+            [reagent-example.shared-code :as shared]
             [reagent.core :as reagent :refer [atom]]
             [reagent.session :as session]
             [ajax.core :refer [GET POST]]
@@ -41,7 +42,9 @@
 (defn layout []
   [:div
    [:div [:h1 "Reagent Example"]]
-   [frameworks-table]])
+   [frameworks-table]
+   [:hr]
+   [:div (shared/get-message)]])
 
 (defn mount-root []
   (reagent/render [layout] (.getElementById js/document "app")))
