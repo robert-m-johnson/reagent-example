@@ -6,11 +6,10 @@
 
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/core.async "0.2.382"]
-                 [ring-server "0.4.0"]
                  [reagent "0.6.0-rc"]
                  [reagent-forms "0.5.24"]
                  [reagent-utils "0.1.8"]
-                 [ring "1.5.0"]
+                 [ring/ring-core "1.5.0"]
                  [ring/ring-defaults "0.2.1"]
                  [ring-middleware-format "0.7.0"]
                  [compojure "1.5.0"]
@@ -22,6 +21,7 @@
                  [venantius/accountant "0.1.7"
                   :exclusions [org.clojure/tools.reader]]
                  [mount "0.1.10"]
+                 [org.immutant/web "2.1.5"]
 
                  ;; ClojureScript
                  [cljs-ajax "0.5.5"]
