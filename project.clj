@@ -5,17 +5,19 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/core.async "0.2.382"]
+                 [org.clojure/core.async "0.2.385"]
                  [reagent "0.6.0-rc"]
                  [reagent-forms "0.5.24"]
                  [reagent-utils "0.1.8"]
-                 [ring/ring-core "1.5.0"]
+                 [ring/ring-core "1.5.0"
+                  :exclusions [org.clojure/tools.reader]]
+                 [ring-server "0.4.0"]
                  [ring/ring-defaults "0.2.1"]
                  [ring-middleware-format "0.7.0"]
                  [compojure "1.5.0"]
                  [hiccup "1.0.5"]
                  [yogthos/config "0.8"]
-                 [org.clojure/clojurescript "1.9.36"
+                 [org.clojure/clojurescript "1.9.89"
                   :scope "provided"]
                  [secretary "1.2.3"]
                  [venantius/accountant "0.1.7"
@@ -23,8 +25,11 @@
                  [mount "0.1.10"]
                  [org.immutant/web "2.1.5"]
 
+                 [org.clojure/tools.reader "0.10.0"]
+
                  ;; ClojureScript
                  [cljs-ajax "0.5.5"]
+                 [com.taoensso/sente "1.9.0"]
                  ]
 
   :plugins [[lein-environ "1.0.2"]

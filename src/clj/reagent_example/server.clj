@@ -1,8 +1,9 @@
 (ns reagent-example.server
   (:require [mount.core :as mount :refer [defstate]]
-            [reagent-example.handler :refer [app]]
+            [reagent-example.handler :as handler :refer [app]]
             [config.core :refer [env]]
-            [immutant.web])
+            [immutant.web]
+            )
   (:gen-class))
 
 (defn create-server []
@@ -16,4 +17,5 @@
 
 (defn -main [& args]
   (def server (create-server))
-  (mount/start))
+  (mount/start)
+  (handler/create-ws))

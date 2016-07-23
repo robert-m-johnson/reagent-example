@@ -1,7 +1,8 @@
 (ns reagent-example.core
-  (:require-macros [reagent-example.async-util-cljs :refer [go-looper]]
+  (:require-macros [cljs.core.async.macros :as asyncm :refer (go go-loop)]
+   [reagent-example.async-util-cljs :refer [go-looper]]
                    [reagent-example.components :refer [table]])
-  (:require [cljs.core.async :as async :refer [timeout <! chan]]
+  (:require [cljs.core.async :as async :refer [timeout <! >! put! chan]]
             [reagent-example.shared-code :as shared]
             [reagent.core :as reagent :refer [atom]]
             [reagent.session :as session]
@@ -9,7 +10,9 @@
             [ajax.edn :refer [edn-response-format]]
             [mount.core :as mount :include-macros true]
             [secretary.core :as secretary :include-macros true]
-            [accountant.core :as accountant]))
+            [accountant.core :as accountant]
+            [taoensso.sente :as sente :refer [cb-success?]]
+            ))
 
 (defonce frameworks (atom []))
 
@@ -61,16 +64,24 @@
 
 (defn init! []
   (fetch-data)
-  (accountant/configure-navigation!
-    {:nav-handler
-     (fn [path]
-       (secretary/dispatch! path))
-     :path-exists?
-     (fn [path]
-       (secretary/locate-route path))})
-  (accountant/dispatch-current!)
   (mount-root)
-   (go-looper
-    (do
-      (<! (timeout 3000))
-      (fetch-data))))
+  ;; (go-looper
+  ;;  (do
+  ;;    (<! (timeout 3000))
+  ;;    (fetch-data)))
+
+  (let [{:keys [chsk ch-recv send-fn state]}
+        (sente/make-channel-socket! "/chsk" ; Note the same path as before
+                                    {:type :auto ; e/o #{:auto :ajax :ws}
+                                     })]
+    (def chsk       chsk)
+    (def ch-chsk    ch-recv) ; ChannelSocket's receive channel
+    (def chsk-send! send-fn) ; ChannelSocket's send API fn
+    (def chsk-state state)   ; Watchable, read-only atom
+    )
+
+  (go-looper
+   (let [event (<! ch-chsk)
+         [id data] (:?data event)]
+     (if (= :some/request-id id)
+         (reset! frameworks data)))))
